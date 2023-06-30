@@ -1,9 +1,6 @@
 <?php
 error_reporting(E_ALL);
-
-const DATA_DIR = './data';
-const CSV_MAX_LINE = 1000;
-const CSV_DELIM = ',';
+require('./conf.php');
 
 function loadCSV(string $fname): array
 {
