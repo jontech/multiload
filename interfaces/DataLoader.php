@@ -1,5 +1,4 @@
 <?php
-
 interface DataLoader
 {
     public static function getSupportedExt(): string;

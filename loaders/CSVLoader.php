@@ -29,6 +29,4 @@ class CSVLoader implements DataLoader
 
         return $res;
     }
-
-
 }
