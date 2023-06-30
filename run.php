@@ -13,7 +13,6 @@ const DATA_LOADERS = [CSVLoader::class, XMLLoader::class, JSONLoader::class];
 
 function loadData(string $fname, string $ext): array
 {
-    print_r($ext);
     foreach (DATA_LOADERS as $Loader) {
         if ($Loader::getSupportedExt() !== $ext) {
             continue;
