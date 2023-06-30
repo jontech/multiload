@@ -1,47 +1,25 @@
 <?php
 error_reporting(E_ALL);
 require('./conf.php');
+require('./interfaces/DataLoader.php');
+require('./loaders/CSVLoader.php');
+require('./loaders/XMLLoader.php');
+require('./loaders/JSONLoader.php');
 
-function loadCSV(string $fname): array
+const DATA_LOADERS = [CSVLoader::class, XMLLoader::class, JSONLoader::class];
+
+function loadData(string $fname, string $ext): array
 {
-    if (($handle = fopen(DATA_DIR . '/' . $fname, 'r')) === false) {
-        return [];
-    }
-
-    if (($header = fgetcsv($handle, CSV_MAX_LINE, CSV_DELIM)) === false) {
-        return [];
-    }
-
-    while (($data = fgetcsv($handle, CSV_MAX_LINE, CSV_DELIM)) !== false) {
-        $item = [];
-        foreach ($data as $index => $val) {
-            $key = $header[$index];
-            $item[$key] = $val;
+    print_r($ext);
+    foreach (DATA_LOADERS as $Loader) {
+        if ($Loader::getSupportedExt() !== $ext) {
+            continue;
         }
-        $res[] = $item;
+
+        $res = $Loader::load($fname);
+
+        break;
     }
-
-    fclose($handle);
-
-    return $res;
-}
-
-function loadXML(string $fname): array
-{
-    $xmlRoot = simplexml_load_file(DATA_DIR . '/' . $fname);
-    $items = (array) $xmlRoot->xpath('/items/item');
-
-    foreach ($items as $xmlItem) {
-        $res[] = (array) $xmlItem;
-    }
-
-    return $res;
-}
-
-function loadJSON(string $fname): array
-{
-    $jsonStr = file_get_contents(DATA_DIR . '/' . $fname);
-    $res = json_decode($jsonStr, true);
 
     return $res;
 }
@@ -49,19 +27,8 @@ function loadJSON(string $fname): array
 function run(string $fname): int
 {
     [$name, $ext] = explode('.', $fname);
-
-    switch ($ext) {
-    case 'csv':
-        $data = loadCSV($fname); break;
-    case 'xml':
-        $data = loadXML($fname); break;
-    case 'json':
-        $data = loadJSON($fname); break;
-    default:
-        $data = [];
-    }
-
-    print_r($data);
+    
+    print_r(loadData($fname, $ext));
 
     return 0;
 }
