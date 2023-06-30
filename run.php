@@ -2,9 +2,12 @@
 error_reporting(E_ALL);
 require('./conf.php');
 require('./interfaces/DataLoader.php');
-require('./loaders/CSVLoader.php');
-require('./loaders/XMLLoader.php');
-require('./loaders/JSONLoader.php');
+spl_autoload_register(
+    function($class)
+    {
+        require './loaders/' . $class . '.php';
+    }
+);
 
 const DATA_LOADERS = [CSVLoader::class, XMLLoader::class, JSONLoader::class];
 
