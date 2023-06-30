@@ -7,7 +7,7 @@ const CSV_DELIM = ',';
 
 function loadCSV(string $fname): array
 {
-    if (($handle = fopen(DATA_DIR . "/" . $fname, "r")) === false) {
+    if (($handle = fopen(DATA_DIR . '/' . $fname, 'r')) === false) {
         return [];
     }
 
@@ -31,9 +31,14 @@ function loadCSV(string $fname): array
 
 function loadXML(string $fname): array
 {
-    print('loading XML');
+    $xmlRoot = simplexml_load_file(DATA_DIR. '/' . $fname);
+    $items = (array) $xmlRoot->xpath('/items/item');
 
-    return [];
+    foreach ($items as $xmlItem) {
+        $res[] = (array) $xmlItem;
+    }
+
+    return $res;
 }
 
 function run(string $fname): int
