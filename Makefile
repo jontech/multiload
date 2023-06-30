@@ -1,3 +1,5 @@
+.PHONY: build run-csv run-xml run-json	
+all: run-csv run-xml run-json
 build:
 	docker build -t multiload .
 
