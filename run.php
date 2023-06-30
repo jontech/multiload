@@ -31,12 +31,20 @@ function loadCSV(string $fname): array
 
 function loadXML(string $fname): array
 {
-    $xmlRoot = simplexml_load_file(DATA_DIR. '/' . $fname);
+    $xmlRoot = simplexml_load_file(DATA_DIR . '/' . $fname);
     $items = (array) $xmlRoot->xpath('/items/item');
 
     foreach ($items as $xmlItem) {
         $res[] = (array) $xmlItem;
     }
+
+    return $res;
+}
+
+function loadJSON(string $fname): array
+{
+    $jsonStr = file_get_contents(DATA_DIR . '/' . $fname);
+    $res = json_decode($jsonStr, true);
 
     return $res;
 }
@@ -50,6 +58,8 @@ function run(string $fname): int
         $data = loadCSV($fname); break;
     case 'xml':
         $data = loadXML($fname); break;
+    case 'json':
+        $data = loadJSON($fname); break;
     default:
         $data = [];
     }
