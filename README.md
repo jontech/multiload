@@ -10,6 +10,10 @@ Run container with one of example data file formats:
 
 `$ make run-csv`
 
+`$ make run-xml`
+
+`$ make run-json`
+
 Or run directly:
 
 `$ docker run -it --rm -v .:/srv multiload php ./run.php <FILE>`
